@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -11,11 +11,13 @@ import FormControl from "@mui/material/FormControl";
 import Input from "@mui/material/Input";
 import FormHelperText from "@mui/material/FormHelperText";
 
-import { v4 as uuid } from "uuid";
+import {v4 as uuid} from "uuid";
 
-import { useDispatch } from "react-redux";
-import { addSound } from "./soundboardsSlice";
-import { AudioSelector } from "../../common/AudioSelector";
+import {useDispatch} from "react-redux";
+import {addSound} from "./soundboardsSlice";
+import {AudioSelector} from "../../common/AudioSelector";
+import {ImageSelector} from "../../common/ImageSelector";
+import {backgrounds} from "../../backgrounds";
 
 type SoundAddProps = {
   soundboardId: string;
@@ -23,13 +25,14 @@ type SoundAddProps = {
   onClose: () => void;
 };
 
-export function SoundAdd({ soundboardId, open, onClose }: SoundAddProps) {
+export function SoundAdd({soundboardId, open, onClose}: SoundAddProps) {
   const dispatch = useDispatch();
 
   const [title, setTitle] = useState("");
   const [url, setURL] = useState("");
   const [fadeIn, setFadeIn] = useState(100);
   const [fadeOut, setFadeOut] = useState(100);
+  const [background, setBackground] = useState(Object.keys(backgrounds)[0]);
 
   useEffect(() => {
     if (!open) {
@@ -57,7 +60,7 @@ export function SoundAdd({ soundboardId, open, onClose }: SoundAddProps) {
     const id = uuid();
     dispatch(
       addSound({
-        sound: { id, title, url, loop: false, volume: 1, fadeIn, fadeOut },
+        sound: {id, title, url, loop: false, volume: 1, fadeIn, fadeOut, background},
         soundboardId: soundboardId,
       })
     );
@@ -69,7 +72,7 @@ export function SoundAdd({ soundboardId, open, onClose }: SoundAddProps) {
       <DialogTitle>Add Sound</DialogTitle>
       <form onSubmit={handleSubmit}>
         <DialogContent>
-          <AudioSelector value={url} onChange={setURL} onFileName={setTitle} />
+          <AudioSelector value={url} onChange={setURL} onFileName={setTitle}/>
           <TextField
             margin="dense"
             id="name"
@@ -83,7 +86,7 @@ export function SoundAdd({ soundboardId, open, onClose }: SoundAddProps) {
             value={title}
             onChange={handleTitleChange}
           />
-          <Box sx={{ display: "flex", gap: 1, my: 1 }}>
+          <Box sx={{display: "flex", gap: 1, my: 1}}>
             <FormControl variant="standard" fullWidth>
               <FormHelperText id="fade-in-helper-text">Fade In</FormHelperText>
               <Input
@@ -127,6 +130,7 @@ export function SoundAdd({ soundboardId, open, onClose }: SoundAddProps) {
               />
             </FormControl>
           </Box>
+          <ImageSelector value={background} onChange={setBackground}/>
         </DialogContent>
         <DialogActions>
           <Button onClick={onClose}>Cancel</Button>

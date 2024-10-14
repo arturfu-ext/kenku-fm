@@ -8,6 +8,7 @@ export interface Sound {
   volume: number;
   fadeIn: number;
   fadeOut: number;
+  background: string;
 }
 
 export interface Soundboard {

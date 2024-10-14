@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { v4 as uuid } from "uuid";
+import React, {useRef, useState} from "react";
+import {v4 as uuid} from "uuid";
 
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
@@ -23,23 +23,23 @@ import {
   DragStartEvent,
   DragOverlay,
 } from "@dnd-kit/core";
-import { SortableContext, rectSortingStrategy } from "@dnd-kit/sortable";
+import {SortableContext, rectSortingStrategy} from "@dnd-kit/sortable";
 
-import { SoundboardItem } from "./SoundboardItem";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
+import {SoundboardItem} from "./SoundboardItem";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../app/store";
 import {
   moveSoundboard,
   Sound,
   addSoundboard,
   addSounds,
 } from "./soundboardsSlice";
-import { SoundboardAdd } from "./SoundboardAdd";
-import { SortableItem } from "../../common/SortableItem";
-import { useDrop } from "../../common/useDrop";
-import { getRandomBackground } from "../../backgrounds";
-import { useHideScrollbar } from "../../../renderer/common/useHideScrollbar";
-import { useNavigate } from "react-router-dom";
+import {SoundboardAdd} from "./SoundboardAdd";
+import {SortableItem} from "../../common/SortableItem";
+import {useDrop} from "../../common/useDrop";
+import {getRandomBackground} from "../../backgrounds";
+import {useHideScrollbar} from "../../../renderer/common/useHideScrollbar";
+import {useNavigate} from "react-router-dom";
 
 const WallPaper = styled("div")({
   position: "absolute",
@@ -56,7 +56,7 @@ type SoundboardProps = {
   onPlay: (sound: Sound) => void;
 };
 
-export function Soundboards({ onPlay }: SoundboardProps) {
+export function Soundboards({onPlay}: SoundboardProps) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const soundboards = useSelector(
@@ -64,7 +64,7 @@ export function Soundboards({ onPlay }: SoundboardProps) {
   );
 
   const pointerSensor = useSensor(PointerSensor, {
-    activationConstraint: { distance: 10 },
+    activationConstraint: {distance: 10},
   });
   const keyboardSensor = useSensor(KeyboardSensor);
 
@@ -73,15 +73,16 @@ export function Soundboards({ onPlay }: SoundboardProps) {
   const items = soundboards.allIds.map((id) => soundboards.byId[id]);
 
   const [dragId, setDragId] = useState<string | null>(null);
+
   function handleDragStart(event: DragStartEvent) {
     setDragId(event.active.id);
   }
 
   function handleDragEnd(event: DragEndEvent) {
-    const { active, over } = event;
+    const {active, over} = event;
 
     if (active.id !== over.id) {
-      dispatch(moveSoundboard({ active: active.id, over: over.id }));
+      dispatch(moveSoundboard({active: active.id, over: over.id}));
     }
 
     setDragId(null);
@@ -89,7 +90,7 @@ export function Soundboards({ onPlay }: SoundboardProps) {
 
   const [addOpen, setAddOpen] = useState(false);
 
-  const { dragging, containerListeners, overlayListeners } = useDrop(
+  const {dragging, containerListeners, overlayListeners} = useDrop(
     (directories) => {
       for (let directory of Object.values(directories)) {
         const files = directory.audioFiles;
@@ -111,6 +112,7 @@ export function Soundboards({ onPlay }: SoundboardProps) {
                 volume: 1,
                 fadeIn: 100,
                 fadeOut: 100,
+                background: "",
               })),
               soundboardId: id,
             })
@@ -125,7 +127,7 @@ export function Soundboards({ onPlay }: SoundboardProps) {
 
   return (
     <>
-      <WallPaper />
+      <WallPaper/>
       <Container
         sx={{
           padding: "0px !important",
@@ -142,22 +144,22 @@ export function Soundboards({ onPlay }: SoundboardProps) {
           justifyContent="space-between"
           alignItems="center"
         >
-          <IconButton onClick={() => navigate(-1)} sx={{ mr: "40px" }}>
-            <Back />
+          <IconButton onClick={() => navigate(-1)} sx={{mr: "40px"}}>
+            <Back/>
           </IconButton>
           <Typography variant="h3" noWrap>
             Soundboards
           </Typography>
           <Tooltip title="Add Soundboard">
             <IconButton onClick={() => setAddOpen(true)}>
-              <AddRounded />
+              <AddRounded/>
             </IconButton>
           </Tooltip>
         </Stack>
         <Grid
           container
           spacing={2}
-          columns={{ xs: 4, sm: 9, md: 12 }}
+          columns={{xs: 4, sm: 9, md: 12}}
           sx={{
             px: 2,
             pb: "248px",
@@ -190,8 +192,10 @@ export function Soundboards({ onPlay }: SoundboardProps) {
                 {dragId ? (
                   <SoundboardItem
                     soundboard={soundboards.byId[dragId]}
-                    onSelect={() => {}}
-                    onPlay={() => {}}
+                    onSelect={() => {
+                    }}
+                    onPlay={() => {
+                    }}
                   />
                 ) : null}
               </DragOverlay>
@@ -200,15 +204,15 @@ export function Soundboards({ onPlay }: SoundboardProps) {
         </Grid>
         <Backdrop
           open={dragging}
-          sx={{ zIndex: 100, bgcolor: "rgba(0, 0, 0, 0.8)" }}
+          sx={{zIndex: 100, bgcolor: "rgba(0, 0, 0, 0.8)"}}
           {...overlayListeners}
         >
-          <Typography sx={{ pointerEvents: "none" }}>
+          <Typography sx={{pointerEvents: "none"}}>
             Drop the soundboards here...
           </Typography>
         </Backdrop>
       </Container>
-      <SoundboardAdd open={addOpen} onClose={() => setAddOpen(false)} />
+      <SoundboardAdd open={addOpen} onClose={() => setAddOpen(false)}/>
     </>
   );
 }

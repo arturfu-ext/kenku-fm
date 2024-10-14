@@ -20,6 +20,7 @@ import { Sound, removeSound, Soundboard, editSound } from "./soundboardsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { SoundSettings } from "./SoundSettings";
 import { RootState } from "../../app/store";
+import {backgrounds, isBackground} from "../../backgrounds";
 
 type SoundItemProps = {
   id: string;
@@ -54,6 +55,11 @@ export function SoundItem({ id, soundboard, onPlay, onStop }: SoundItemProps) {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
+
+  const image = isBackground(sound.background)
+    ? backgrounds[sound.background]
+    : sound.background;
+
   function handleMenuClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
   }
@@ -137,7 +143,8 @@ export function SoundItem({ id, soundboard, onPlay, onStop }: SoundItemProps) {
         sx={{
           display: "flex",
           flexDirection: "column",
-          backgroundColor: "rgba(34, 38, 57, 0.8)",
+          backgroundImage: `url("${image}")`,
+          backgroundSize: "cover",
           height: large ? "150px" : "200px",
           position: "relative",
         }}
