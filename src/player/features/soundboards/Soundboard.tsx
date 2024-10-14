@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
@@ -12,26 +12,26 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import Backdrop from "@mui/material/Backdrop";
 
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../app/store";
-import { removeSoundboard, Sound, addSounds } from "./soundboardsSlice";
-import { SoundAdd } from "./SoundAdd";
-import { SoundboardSettings } from "./SoundboardSettings";
-import { SoundboardSounds } from "./SoundboardSounds";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../../app/store";
+import {removeSoundboard, Sound, addSounds} from "./soundboardsSlice";
+import {SoundAdd} from "./SoundAdd";
+import {SoundboardSettings} from "./SoundboardSettings";
+import {SoundboardSounds} from "./SoundboardSounds";
 
-import { isBackground, backgrounds } from "../../backgrounds";
-import { useDrop } from "../../common/useDrop";
-import { useNavigate, useParams } from "react-router-dom";
+import {isBackground, backgrounds} from "../../backgrounds";
+import {useDrop} from "../../common/useDrop";
+import {useNavigate, useParams} from "react-router-dom";
 
 type SoundboardProps = {
   onPlay: (sound: Sound) => void;
   onStop: (id: string) => void;
 };
 
-export function Soundboard({ onPlay, onStop }: SoundboardProps) {
+export function Soundboard({onPlay, onStop}: SoundboardProps) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { soundboardId } = useParams();
+  const {soundboardId} = useParams();
   const soundboard = useSelector(
     (state: RootState) => state.soundboards.soundboards.byId[soundboardId]
   );
@@ -45,9 +45,11 @@ export function Soundboard({ onPlay, onStop }: SoundboardProps) {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const menuOpen = Boolean(anchorEl);
+
   function handleMenuClick(event: React.MouseEvent<HTMLButtonElement>) {
     setAnchorEl(event.currentTarget);
   }
+
   function handleMenuClose() {
     setAnchorEl(null);
   }
@@ -68,7 +70,7 @@ export function Soundboard({ onPlay, onStop }: SoundboardProps) {
     handleMenuClose();
   }
 
-  const { dragging, containerListeners, overlayListeners } = useDrop(
+  const {dragging, containerListeners, overlayListeners} = useDrop(
     (directories) => {
       const sounds: Sound[] = [];
       for (let directory of Object.values(directories)) {
@@ -79,10 +81,11 @@ export function Soundboard({ onPlay, onStop }: SoundboardProps) {
             volume: 1,
             fadeIn: 100,
             fadeOut: 100,
+            background: "",
           }))
         );
       }
-      dispatch(addSounds({ sounds, soundboardId: soundboard.id }));
+      dispatch(addSounds({sounds, soundboardId: soundboard.id}));
     }
   );
 
@@ -126,22 +129,22 @@ export function Soundboard({ onPlay, onStop }: SoundboardProps) {
           direction="row"
           justifyContent="space-between"
           alignItems="center"
-          sx={{ zIndex: 1 }}
+          sx={{zIndex: 1}}
         >
-          <IconButton onClick={() => navigate(-1)} sx={{ mr: "40px" }}>
-            <Back />
+          <IconButton onClick={() => navigate(-1)} sx={{mr: "40px"}}>
+            <Back/>
           </IconButton>
-          <Typography sx={{ zIndex: 1 }} variant="h3" noWrap>
+          <Typography sx={{zIndex: 1}} variant="h3" noWrap>
             {soundboard.title}
           </Typography>
           <Stack direction="row">
             <Tooltip title="Add Sound">
               <IconButton onClick={() => setAddOpen(true)}>
-                <Add />
+                <Add/>
               </IconButton>
             </Tooltip>
             <IconButton onClick={handleMenuClick}>
-              <MoreVert />
+              <MoreVert/>
             </IconButton>
           </Stack>
         </Stack>
@@ -152,10 +155,10 @@ export function Soundboard({ onPlay, onStop }: SoundboardProps) {
         />
         <Backdrop
           open={dragging}
-          sx={{ zIndex: 100, bgcolor: "rgba(0, 0, 0, 0.8)" }}
+          sx={{zIndex: 100, bgcolor: "rgba(0, 0, 0, 0.8)"}}
           {...overlayListeners}
         >
-          <Typography sx={{ pointerEvents: "none" }}>
+          <Typography sx={{pointerEvents: "none"}}>
             Drop the sounds here...
           </Typography>
         </Backdrop>

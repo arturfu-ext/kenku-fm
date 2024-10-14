@@ -14,6 +14,7 @@ import FormHelperText from "@mui/material/FormHelperText";
 import { useDispatch } from "react-redux";
 import { editSound, Sound } from "./soundboardsSlice";
 import { AudioSelector } from "../../common/AudioSelector";
+import {ImageSelector} from "../../common/ImageSelector";
 
 type SoundSettingsProps = {
   sound: Sound;
@@ -49,6 +50,10 @@ export function SoundSettings({ sound, open, onClose }: SoundSettingsProps) {
   function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     onClose();
+  }
+
+  function handleBackgroundChange(background: string) {
+    dispatch(editSound({ id: sound.id, background }));
   }
 
   return (
@@ -124,6 +129,10 @@ export function SoundSettings({ sound, open, onClose }: SoundSettingsProps) {
               />
             </FormControl>
           </Box>
+          <ImageSelector
+            value={sound.background}
+            onChange={handleBackgroundChange}
+          />
         </DialogContent>
         <DialogActions>
           <Button type="submit">Done</Button>
